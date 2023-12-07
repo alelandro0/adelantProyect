@@ -1,0 +1,10 @@
+.componet{
+    display: flex ;
+    gap: 22px;
+    list-style: none;
+    text-decoration: none;
+    
+}
+.box{
+    border-bottom: 5px solid white;
+}

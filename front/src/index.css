@@ -1,0 +1,117 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+}
+
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+label {
+  display: block;
+}
+.form {
+  width: 400px;
+  margin-left: 420px;
+  margin-top: 90px;
+}
+
+input[type="text"],
+[type="password"],[type="email"] {
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 5px 0 10px 0;
+
+}
+h1{
+  color: white;
+  margin-top: 40px;
+}
+#tarea{
+  width: 40%;
+  border-radius: 12px;
+}
+
+.uno{
+  color: white;
+  text-align: center;
+}
+#resultado{
+  padding: 30px ;
+  color: #eee;
+  font-size: 18px;
+}
+label{
+  color: black;
+  margin-top: 20px;
+}
+input[type="button"],
+button {
+  background-color: #002252;
+  background-position:bottom;
+  padding: 10px;
+  border: 0;
+  min-width: 100px;
+  border-radius: 5px;
+  color: white;
+  margin-top: 9px;
+  margin-left: 130px;
+}
+
+nav {
+  background-color: #eee;
+}
+
+nav ul {
+  margin: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  padding: 10px;
+}
+ul{
+  background: #002252;
+}
+a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.luna{
+  position:absolute;
+  top:15%;
+  right:50%;
+  right:calc(30% - 100px);
+  margin-top: 50px;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  background: white;
+  box-shadow:0px 0px 100px #FFFF8C;
+  z-index:5;
+  animation: moonAnimation 3s infinite;
+}
+
+@keyframes moonAnimation{ 
+  0% { box-shadow: 0px 0px 100px #FFF; } 
+  50% { box-shadow: 0px 0px 140px #FFF; } 
+  100% { box-shadow: 0px 0px 100px #FFF; } 
+}
+.dashboard {
+  width: 500px;
+  margin: auto;
+}
+
+.errorMessage {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+}

@@ -1,0 +1,11 @@
+.perfil{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.publiText{
+    width: 100vh;
+}
+.textarea{
+    width: 100%;
+}
