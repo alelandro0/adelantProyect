@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Autenticacion/AutProvider";
-import { API_URL } from "../Autenticacion/constanst";
+//import { API_URL } from "../Autenticacion/constanst";
 import PortalLayout from "../layout/PortalLayout";
-import './dashboard.css'
-
-interface Todo {
-  _id: string;
-  title: string;
-  completed: boolean;
-  idUser: string;
-}
+import "./dashboard.css";
 
 interface UserProfile {
   name: string;
@@ -29,13 +22,17 @@ interface Publication {
 }
 
 export default function Dashboard() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState("");
+  const [editingProfileImage, setEditingProfileImage] = useState(false);
+ 
+  
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: "",
     description: "",
-    profileImage: "URL_DE_LA_IMAGEN_POR_DEFECTO",
+    profileImage:"",
   });
+  
+  // Resto del componente
+  
   const [publications, setPublications] = useState<Publication[]>([]);
   const [newPublication, setNewPublication] = useState({
     contenido: "",
@@ -48,34 +45,9 @@ export default function Dashboard() {
     loadPublications();
   }, []);
 
-  async function createTodo() {
-    try {
-      const response = await fetch(`${API_URL}/todos`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.getAccessToken()}`,
-        },
-        body: JSON.stringify({
-          title,
-        }),
-      });
-
-      if (response.ok) {
-        const json = await response.json();
-        setTodos([json, ...todos]);
-        setTitle(""); // Limpiar el campo después de crear la tarea
-      } else {
-        console.error("Error al crear la tarea:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error al crear la tarea:", error);
-    }
-  }
-
   async function loadUserProfile() {
     try {
-      const response = await fetch(`${API_URL}/user/profile`, {
+      const response = await fetch(`http://localhost:5000/profile`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${auth.getAccessToken()}`,
@@ -84,7 +56,14 @@ export default function Dashboard() {
 
       if (response.ok) {
         const json = await response.json();
-        setUserProfile(json);
+
+        // Actualiza el estado del perfil con la información recibida
+        setUserProfile({
+          name: json.image.filename,
+          description: json.image.description,
+          // Actualiza profileImage con la URL de la imagen almacenada en MongoDB
+          profileImage:json.image.filename
+        });
       } else {
         console.error("Error al cargar el perfil:", response.statusText);
       }
@@ -93,9 +72,10 @@ export default function Dashboard() {
     }
   }
 
+
   async function loadPublications() {
     try {
-      const response = await fetch(`${API_URL}/publications`, {
+      const response = await fetch(`http://localhost:5000/api/publication`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${auth.getAccessToken()}`,
@@ -113,11 +93,48 @@ export default function Dashboard() {
     }
   }
 
+  const handleProfileImageChange = async (files: FileList | null) => {
+    try {
+        if (!files || files.length === 0) {
+            console.error("No se seleccionó ningún archivo");
+            return;
+        }
+        const formData = new FormData();
+        formData.append("imagePerfil", files[0]);  // Cambia "profileImage" a "file" según el controlador del backend
+
+        // Almacena la URL en una variable
+        const apiUrl='http://localhost:5000/image-upload';
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${auth.getAccessToken()}`,
+            },
+            body: formData,
+        });
+
+        if (response.ok) {
+            // Recargar el perfil después de cambiar la imagen
+            console.log("Imagen cargada con éxito");
+
+            await loadUserProfile();
+            // Restablecer el estado de edición de la imagen de perfil
+            setEditingProfileImage(false);
+        } else {
+            // Imprime la URL y la respuesta en caso de error
+            console.error(`Error al cambiar la imagen de perfil. URL: ${apiUrl}, Status: ${response.status}, Message: ${response.statusText}`);
+        }
+    } catch (error) {
+        // Imprime la URL en caso de error
+        console.error(`Error al cambiar la imagen de perfil, Error: ${error}`);
+    }
+};
+
+
   async function handlePublish(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_URL}/publications`, {
+      const response = await fetch(`http://localhost:5000/api/upload`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,19 +165,38 @@ export default function Dashboard() {
 
   return (
     <PortalLayout>
+
       <div className="perfil">
-        <div className="profile-header">
-          <img
-            src={userProfile.profileImage}
-            alt="Perfil"
-            className="profile-image"
-          />
-          <h1>{userProfile.name}</h1>
-          <p>{userProfile.description}</p>
+    
+        <div className="profile-header" onClick={() => setEditingProfileImage(true)}>
+          {editingProfileImage ? (
+            <div>
+              <input
+                type="file"
+                id="profileImageInput"
+                style={{ display: "none" }}
+                onChange={(e) => handleProfileImageChange(e.target.files)}
+              />
+              <label style={{ color: "white" }} htmlFor="profileImageInput">Seleccionar nueva imagen de perfil</label>
+            </div>
+          ) : (
+            <>
+            {userProfile.profileImage ?(
+                <img
+                src={`http://localhost:5000/profile/${userProfile.profileImage}`}
+                alt="Perfil"
+                className="profile-image"
+              />
+            ):null}
+             
+            
+            </>
+          )}
         </div>
-      
+
         <form className="publiText" onSubmit={handlePublish}>
-          <textarea className="textarea"
+          <textarea 
+            className="textarea"
             placeholder="Escribe tu nueva publicación"
             value={newPublication.contenido}
             onChange={(e) =>
@@ -183,6 +219,7 @@ export default function Dashboard() {
           />
           <button type="submit">Publicar</button>
         </form>
+
         {publications.length > 0 ? (
           <div className="publications">
             {publications.map((publication) => (
@@ -228,4 +265,3 @@ export default function Dashboard() {
     </PortalLayout>
   );
 }
-
