@@ -1,15 +1,9 @@
 const mongoose=require('mongoose')
 
 const imageSchema = new mongoose.Schema({
-    filename: String,
-    img:{
-     data:Buffer,
-     contentType: String
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-  }
+    nombre: String,
+    imagen:Buffer
+  
   });
   imageSchema.methods.toJSON = function () {
     const imageObject = this.toObject();

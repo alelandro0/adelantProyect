@@ -13,7 +13,6 @@ const Image =require('./schema/imagenUpload.js');
 const { log } = require("console");
 
 
-
 require("dotenv").config();
 
 const expressPort = process.env.PORT || 5000;
@@ -81,37 +80,39 @@ app.use("/api/refresh-token", require("./routes/refreshToken"));
 app.use('/api/publication',authenticate, require("./routes/publicationsRoutes"));
 app.post('/image-upload', upload.single('imagePerfil'), async (req, res) => {
     try {
-      const { originalname, buffer } = req.file;
+      
+     
      
       console.log('verificar estructura :',req.file);
       // Guardar la referencia de la imagen en MongoDB
-      const newImage = new Image({
-        filename:originalname,
+      const imagenPerfil = new Image({
+        name:req.file.originalname,
+        imagenPerfil:req.buffer
         
       });
   
-      await newImage.save(); // Utilizar await para esperar la operación de guardado
-      console.log('filename:',newImage.filename);
-      console.log('URL: ',newImage.imageUrl);
+      await imagenPerfil.save(); // Utilizar await para esperar la operación de guardado
+      res.send({message:'imagen cargada con exito'})
+      // console.log('filename:',newImage.filename);
+      // console.log('URL: ',newImage.imageUrl);
     
-      res.status(200).json({success:true, imageUrl:newImage.imageUrl})
-      console.log('imagen carga con exito');
+      // res.status(200).json({success:true, imageUrl:newImage.imageUrl})
+      // console.log('imagen carga con exito');
     } catch (error) {
       console.error('Error al cargar y guardar la imagen:', error);
-      res.status(500).send('Error al cargar la imagen');
+      res.status(500).send('Error al cargar ');
     }
   });
   app.get('/profile', async (req, res) => {
     try {
-      const latestImage = await Image.findOne().sort({ createdAt: -1 });
-  
-      if (latestImage) {
-        console.log('Carga exitosa');
-        // Devolver los datos de la imagen directamente como respuesta
-        res.status(200).json({ success: true, image: latestImage });
-      } else {
-        res.status(404).json({ success: false, error: 'No se encontraron imágenes' });
-      }
+      const imagenid= mongoose.model('imagenPerfil', {name: string, imagen: buffer})
+      const obtenerImagen = async (id)=>{
+       const imagenes= Image.findById(id)
+       if (imagenes) {
+        return imagenes.imagen;
+       } 
+       return null;
+      } 
     } catch (error) {
       console.error('Error al cargar la última imagen:', error);
       res.status(500).json({ success: false, error: 'Error al cargar la última imagen' });
