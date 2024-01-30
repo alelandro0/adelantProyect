@@ -28,8 +28,8 @@ export default function PortalLayout({children}: {children:React.ReactNode}){
     return (
         <>
         <header>
-          <nav className="box">
-            <ul className="componet">
+            <a href="#" className="logo"></a>
+            <ul className="navigation">
               <li>
                 <Link style={{color:'white',fontSize:'25px', textDecoration:'none'}} to="/dashboard">Perfil</Link>
               </li>
@@ -45,7 +45,6 @@ export default function PortalLayout({children}: {children:React.ReactNode}){
               <Link style={{color:'white',fontSize:'25px', textDecoration:'none'}}  to="/chat"  >Chat</Link>
               </li>
             </ul>
-          </nav>
         </header>
   
         <main>{children}</main>

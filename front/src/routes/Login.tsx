@@ -2,6 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../Autenticacion/AutProvider";
 import DefaultLayout from "../layout/DefaultLayout"
 import { useState } from "react"
+import Footer from "./Footer";
 import { API_URL } from "../Autenticacion/constanst";
 import type { AuthResponse, AuthResponseError } from "../types/types";
 import React from "react";
@@ -80,6 +81,7 @@ export default function Login(){
           onChange={(e)=>setPassword(e.target.value)}></input>
         <button  className="boton">Login</button>
       </form>
+      <Footer/>
     </DefaultLayout>
   
   )

@@ -8,6 +8,7 @@ import Dashboard from './routes/dashboard'
 import ProtectedRoute from './routes/protectedRaute'
 import { AuthProvider } from './Autenticacion/AutProvider'
 import {ChatClient} from './routes/chat.io'
+import Footer from './routes/Footer'
 
 const router = createBrowserRouter([
   {

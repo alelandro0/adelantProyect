@@ -1,10 +1,32 @@
-.componet{
-    display: flex ;
-    gap: 22px;
-    list-style: none;
-    text-decoration: none;
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+  } 
+
+  /*Terminar stilo logo*/
+  .logo {
+    max-width: 90px;
+  }
+
+
+  .navigation {
+    display: flex;
     
-}
-.box{
-    border-bottom: 5px solid white;
-}
+  }
+  .navigation li {
+    list-style: none;
+  }
+  .navigation li a {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 40px;
+  }
+

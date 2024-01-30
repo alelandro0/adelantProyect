@@ -1,10 +1,10 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../Autenticacion/AutProvider";
-
-import React, { useState } from "react"
-import DefaultLayout from "../layout/DefaultLayout"
+import React, { useState } from "react";
+import Footer from "./Footer";
+import DefaultLayout from "../layout/DefaultLayout";
 import { API_URL } from "../Autenticacion/constanst";
-import type{ AuthResponseError } from "../types/types";
+import type { AuthResponseError } from "../types/types";
 
 export default function Signup(){
   const [name, setName] = useState("");
@@ -65,6 +65,7 @@ export default function Signup(){
         <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)}></input>
         <button>Create Usuario</button>
       </form>
+      <Footer/>
     </DefaultLayout>
   
   )
