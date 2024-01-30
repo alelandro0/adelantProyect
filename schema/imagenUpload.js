@@ -1,10 +1,10 @@
 const mongoose=require('mongoose')
 
 const imageSchema = new mongoose.Schema({
-    nombre: String,
-    imagen:Buffer
-  
-  });
+  userId: String,
+  name: String,
+  imagenPerfil: Buffer
+});
   imageSchema.methods.toJSON = function () {
     const imageObject = this.toObject();
     return { filename: imageObject.filename };
